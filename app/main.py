@@ -1,8 +1,21 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 from .schemas import Task, TaskIn
 from . import storage
 
-app = FastAPI(title="Tasks API")
+sqlite_file_name = "database.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+connect_args = {"check_same_thread": False}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # On startup, create database engine and create db/tables
+    storage.initialize(sqlite_url, connect_args=connect_args)
+    yield
+    # Optional cleanup code can go here
+
+app = FastAPI(title="Tasks API", lifespan=lifespan)
 
 @app.post("/tasks", response_model=Task, status_code=201)
 def create(task: TaskIn):
