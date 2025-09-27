@@ -1,4 +1,5 @@
 from sqlmodel import SQLModel, Field
+from pydantic import BaseModel
 
 # Fields shared by all Task models
 class TaskBase(SQLModel):
@@ -21,3 +22,8 @@ class TaskCreate(TaskBase):
 class TaskUpdate(TaskBase):
     title: str | None = None
     done: bool | None = None
+
+# Model for the AI-generated follow-up suggestion (not stored in DB)
+class TaskWithAIResponse(BaseModel):
+    task: TaskPublic
+    model_response: str | None

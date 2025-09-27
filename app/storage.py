@@ -21,7 +21,8 @@ class Storage:
         self.session.refresh(db_task)
         return db_task
 
-    def list_tasks(self, limit: Annotated[int, Query(le=100)] = 100): return self.session.exec(select(Task).offset(0).limit(limit)).all()
+    def list_tasks(self, limit: Annotated[int, Query(le=100)] = 100):
+        return self.session.exec(select(Task).offset(0).limit(limit)).all()
 
     def get_task(self, tid: int): 
         task = self.session.get(Task, tid)

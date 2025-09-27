@@ -1,13 +1,13 @@
 from fastapi import FastAPI, HTTPException
-from .schemas import TaskPublic, TaskCreate, TaskUpdate
+from .schemas import TaskPublic, TaskCreate, TaskUpdate, TaskWithAIResponse
 from .service import Service
 
 service = Service()
 app = FastAPI(title="Tasks API")
 
-@app.post("/tasks", response_model=TaskPublic, status_code=201)
+@app.post("/tasks", response_model=TaskWithAIResponse, status_code=201)
 def create(task: TaskCreate):
-    return service.storage.create_task(task)
+    return service.create_task_with_ai_response(task)
 
 @app.get("/tasks", response_model=list[TaskPublic])
 def list_all():
