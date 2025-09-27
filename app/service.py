@@ -1,4 +1,5 @@
 from .storage import Storage
+
 class Service:
     def __init__(self):
         super().__init__()
@@ -8,5 +9,3 @@ class Service:
         connect_args = {"check_same_thread": False}
         self.storage = Storage(sqlite_url, connect_args=connect_args)
         return
-    
-service = Service()

@@ -1,15 +1,12 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI, HTTPException
-from .schemas import TaskPublic, TaskIn
-from .storage import Storage
-from .service import service
+from .schemas import TaskPublic, TaskCreate, TaskUpdate
+from .service import Service
 
-
+service = Service()
 app = FastAPI(title="Tasks API")
 
 @app.post("/tasks", response_model=TaskPublic, status_code=201)
-def create(task: TaskIn):
+def create(task: TaskCreate):
     return service.storage.create_task(task)
 
 @app.get("/tasks", response_model=list[TaskPublic])
@@ -18,20 +15,23 @@ def list_all():
 
 @app.get("/tasks/{tid}", response_model=TaskPublic)
 def get_one(tid: int):
-    t = service.storage.get_task(tid)
-    # if not t:
-    #     raise HTTPException(404, detail="Not found")
-    return t
+    try: 
+        t = service.storage.get_task(tid)
+        return t
+    except Exception as e:
+        raise HTTPException(404, detail=str(e))
 
-@app.put("/tasks/{tid}", response_model=TaskPublic)
-def update(tid: int, task: TaskIn):
-    t = service.storage.update_task(tid, task)
-    # if not t:
-    #     raise HTTPException(404, detail="Not found")
-    return t
+@app.patch("/tasks/{tid}", response_model=TaskPublic)
+def update(tid: int, task: TaskUpdate):
+    try: 
+        t = service.storage.update_task(tid, task)
+        return t
+    except Exception as e:
+        raise HTTPException(404, detail=str(e))
 
 @app.delete("/tasks/{tid}", status_code=204)
 def delete(tid: int):
-    return service.storage.delete_task(tid)
-    # if not service.storage.delete_task(tid):
-        # raise HTTPException(404, detail="Not found")
+    try: 
+        service.storage.delete_task(tid)
+    except Exception as e:
+        raise HTTPException(404, detail=str(e))

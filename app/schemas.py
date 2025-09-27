@@ -13,6 +13,11 @@ class Task(TaskBase, table=True):
 class TaskPublic(TaskBase):
     id: int
 
-# Task model to use when creating or updating tasks
-class TaskIn(TaskBase):
+# Task model to use when creating tasks
+class TaskCreate(TaskBase):
     pass
+
+# Task model to use when updating tasks
+class TaskUpdate(TaskBase):
+    title: str | None = None
+    done: bool | None = None
