@@ -8,7 +8,7 @@ Install dependencies:
 
 ```bash
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install "fastapi[standard]" uvicorn pydantic
+pip install "fastapi[standard]" uvicorn pydantic sqlmodel
 ```
 
 # Run the application
